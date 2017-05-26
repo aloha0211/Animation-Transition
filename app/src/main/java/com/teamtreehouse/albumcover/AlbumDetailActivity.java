@@ -13,6 +13,7 @@ import android.support.v7.graphics.Palette;
 import android.transition.ChangeBounds;
 import android.transition.Fade;
 import android.transition.Scene;
+import android.transition.Transition;
 import android.transition.TransitionManager;
 import android.transition.TransitionSet;
 import android.view.View;
@@ -21,6 +22,9 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+
+import com.teamtreehouse.albumcover.transition.Fold;
+import com.teamtreehouse.albumcover.transition.Scale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -58,7 +62,9 @@ public class AlbumDetailActivity extends Activity {
 
     @OnClick(R.id.album_art)
     public void onAlbumArtClick(View view) {
-        animate();
+//        animate();
+        Transition transition = createTransition();
+        TransitionManager.beginDelayedTransition(detailContainer, transition);
     }
 
     @OnClick(R.id.track_panel)
@@ -121,6 +127,30 @@ public class AlbumDetailActivity extends Activity {
         mTransitionManager.setTransition(mExpandedScene, mCollapsedScene, expandTransitionSet);
         mTransitionManager.setTransition(mCollapsedScene, mExpandedScene, collapseTransitionSet);
         mCollapsedScene.enter();
+    }
+
+    private Transition createTransition() {
+        TransitionSet set = new TransitionSet();
+        set.setOrdering(TransitionSet.ORDERING_SEQUENTIAL);
+
+        Transition tFab = new Scale();
+        tFab.setDuration(150);
+        tFab.addTarget(fab);
+
+        Transition tTitle = new Fold();
+        tTitle.setDuration(150);
+        tTitle.addTarget(titlePanel);
+
+        Transition tTrack = new Fold();
+        tTrack.setDuration(150);
+        tTrack.addTarget(trackPanel);
+
+
+        set.addTransition(tTrack);
+        set.addTransition(tTitle);
+        set.addTransition(tFab);
+
+        return set;
     }
 
     private void animate() {
