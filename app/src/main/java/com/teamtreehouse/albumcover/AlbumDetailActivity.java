@@ -62,7 +62,7 @@ public class AlbumDetailActivity extends Activity {
     }
 
     @OnClick(R.id.track_panel)
-    public void onTrackPanelClick(View view){
+    public void onTrackPanelClick(View view) {
         if (mCurrentScene == mExpandedScene) {
             mCurrentScene = mCollapsedScene;
         } else {
